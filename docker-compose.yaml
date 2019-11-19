@@ -1,0 +1,60 @@
+version: "3"
+
+services:
+  mariadb:
+    container_name: blog_mariadb
+    build:
+      context: ./mariadb
+      dockerfile: Dockerfile
+    volumes:
+      - ./mariadb_data:/var/lib/mysql
+    #restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
+
+  phpmyadmin:
+    #restart: unless-stopped
+    container_name: blog_phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      PMA_HOST: blog_mariadb
+    depends_on:
+      - mariadb
+    volumes:
+      - /sessions
+
+  php:
+    container_name: blog_php
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./aegea/:/var/www/blog
+    #restart: unless-stopped
+    depends_on:
+      - mariadb
+
+  caddy:
+    container_name: blog_caddy
+    #restart: unless-stopped
+    build:
+      context: ./caddy
+      dockerfile: Dockerfile
+    image: abiosoft/caddy
+    depends_on:
+      - mariadb
+      - phpmyadmin
+      - php
+    volumes:
+      - ./log/:/var/log/
+      - ./caddy/.caddy:/root/.caddy/
+      - ./aegea/:/var/www/blog
+    ports:
+      - 80:80
+      - 443:443
+      - 2015:2015
