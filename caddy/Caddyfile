@@ -1,6 +1,6 @@
 # Your blog domain
-blog.test:80 {
-#blog.ru {
+localhost:80 {
+#yourdomain.ru {
     root /var/www/blog
     index index.php index.html index.html
 
