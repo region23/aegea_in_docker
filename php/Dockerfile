@@ -27,8 +27,8 @@ COPY conf.d/settings.ini /usr/local/etc/php/conf.d/settings.ini
 RUN mkdir -p /var/www/blog
 
 # Aegea version (you can see latest version number here: https://blogengine.ru/get/)
-ENV VERSION 3386
-ENV DIST e2_distr_v${VERSION}.zip
+ARG AEGEA_VERSION
+ENV DIST e2_distr_v${AEGEA_VERSION}.zip
 ENV URL https://blogengine.ru/download/${DIST}
 
 RUN curl -O $URL && unzip $DIST -d /var/www/blog

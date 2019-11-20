@@ -1,0 +1,26 @@
+# Your blog domain
+blog.test:80 {
+#blog.ru {
+    root /var/www/blog
+    index index.php index.html index.html
+
+    rewrite {
+        to {path} {path}/ /index.php?go={uri}
+    }
+
+    rewrite {
+        regexp /\.ht
+        to status 403
+    }
+
+    rewrite {
+        regexp \.psa$
+        to status 403
+    }
+
+    fastcgi / blog_php:9000 php
+
+    errors stdout 
+
+    log stdout
+}
