@@ -16,20 +16,12 @@ RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev lib
 RUN docker-php-source extract
 RUN docker-php-ext-install mysqli pdo_mysql mbstring
 
-RUN apk add --no-cache zlib-dev
-RUN docker-php-ext-configure zip
+RUN apk add --no-cache zlib-dev libzip-dev
+RUN docker-php-ext-configure zip --with-libzip
 RUN docker-php-ext-install zip
-RUN apk del --no-cache zlib-dev
+RUN apk del --no-cache zlib-dev libzip-dev
 
 RUN mkdir -p /usr/local/etc/php/conf.d
 COPY conf.d/settings.ini /usr/local/etc/php/conf.d/settings.ini
 
 RUN mkdir -p /var/www/blog
-
-# Aegea version (you can see latest version number here: https://blogengine.ru/get/)
-ARG AEGEA_VERSION
-ENV DIST e2_distr_v${AEGEA_VERSION}.zip
-ENV URL https://blogengine.ru/download/${DIST}
-
-RUN curl -O $URL && unzip $DIST -d /var/www/blog
-

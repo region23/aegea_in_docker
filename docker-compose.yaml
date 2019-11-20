@@ -22,12 +22,11 @@ services:
       context: ./php
       dockerfile: Dockerfile
     volumes:
-      - ./aegea/:/var/www/blog
+      - ./log/:/var/log/
+      - ./aegea:/var/www/blog
     #restart: unless-stopped
     depends_on:
       - mariadb
-    environment:
-      AEGEA_VERSION: ${AEGEA_VERSION}
 
   caddy:
     container_name: blog_caddy
@@ -35,19 +34,18 @@ services:
     build:
       context: ./caddy
       dockerfile: Dockerfile
+      args:
+        EMAIL: ${EMAIL}
+        CADDY_PLUGINS: ${CADDY_PLUGINS}
     image: abiosoft/caddy
     depends_on:
       - mariadb
-      - phpmyadmin
       - php
     volumes:
       - ./log/:/var/log/
       - ./caddy/.caddy:/root/.caddy/
-      - ./aegea/:/var/www/blog
+      - ./aegea:/var/www/blog
     ports:
       - 80:80
       - 443:443
       - 2015:2015
-    environment:
-      EMAIL: ${EMAIL}
-      CADDY_PLUGINS: ${CADDY_PLUGINS}

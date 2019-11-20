@@ -1,6 +1,6 @@
-1. Выполни `cp .env.template .env` и пропиши в `.env` параметры
-2. Выполни `sudo chmod -R 777 aegea`
-3. Выполни `docker-compose build`
-4. Выполни `docker-compose run`
-
-Или почитай статью с пошаговой инструкцией на pavlenko.page
+1. Выполни `./init.sh` и пропиши в `.env` параметры  
+2. Пропиши в `caddy/Caddyfile` вместо `blog.test:80` свой домен  
+3. Выполни `docker-compose build`  
+4. Выполни `docker-compose run`  
+  
+Или почитай статью с пошаговой инструкцией.  
