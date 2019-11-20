@@ -17,6 +17,4 @@ fi
 # Unset the variable  for bash behavior
 shopt -u dotglob
 
-cp -n .env.template .env
-
 sudo chmod -R 777 aegea
