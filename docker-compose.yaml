@@ -16,18 +16,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     command: --character-set-server=utf8 --collation-server=utf8_general_ci
 
-  phpmyadmin:
-    #restart: unless-stopped
-    container_name: blog_phpmyadmin
-    image: phpmyadmin/phpmyadmin:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      PMA_HOST: blog_mariadb
-    depends_on:
-      - mariadb
-    volumes:
-      - /sessions
-
   php:
     container_name: blog_php
     build:
@@ -38,6 +26,8 @@ services:
     #restart: unless-stopped
     depends_on:
       - mariadb
+    environment:
+      AEGEA_VERSION: ${AEGEA_VERSION}
 
   caddy:
     container_name: blog_caddy
@@ -58,3 +48,6 @@ services:
       - 80:80
       - 443:443
       - 2015:2015
+    environment:
+      EMAIL: ${EMAIL}
+      CADDY_PLUGINS: ${CADDY_PLUGINS}

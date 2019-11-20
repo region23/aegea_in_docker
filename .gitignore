@@ -1,0 +1,5 @@
+.DS_Store
+aegea/
+.env
+mariadb_data/
+log/
